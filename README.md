@@ -29,11 +29,11 @@ discord.run()
 
 ## Example Output
 
-📣 📣 📣 📣 📣 📣 📣 📣 📣 📣 
-*PSSSSSSSSSSSSSSSSSSSSSSST*
-Check Out This Upcoming Event:
-**Title**: Let's Go to the ROM
-**Date**: Tue, Nov 15, 2022
-**Time**: 6:00 PM
-RSVP @ https://meetup.com//geekalicious/events/289603587/ 👀
-📣 📣 📣 📣 📣 📣 📣 📣 📣 📣
+> 📣 📣 📣 📣 📣 📣 📣 📣 📣 📣 
+> *PSSSSSSSSSSSSSSSSSSSSSSST*
+> Check Out This Upcoming Event:
+> **Title**: Let's Go to the ROM
+> **Date**: Tue, Nov 15, 2022
+> **Time**: 6:00 PM
+> RSVP @ https://meetup.com//geekalicious/events/289603587/ 👀
+> 📣 📣 📣 📣 📣 📣 📣 📣 📣 📣
