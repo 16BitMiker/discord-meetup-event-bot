@@ -29,6 +29,7 @@ discord.run()
 
 ## Example Output
 
+```
 📣 📣 📣 📣 📣 📣 📣 📣 📣 📣 
 *PSSSSSSSSSSSSSSSSSSSSSSST*
 Check Out This Upcoming Event:
@@ -37,3 +38,4 @@ Check Out This Upcoming Event:
 **Time**: 6:00 PM
 RSVP @ https://meetup.com//geekalicious/events/289603587/ 👀
 📣 📣 📣 📣 📣 📣 📣 📣 📣 📣
+```
