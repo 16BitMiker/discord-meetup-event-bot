@@ -1,17 +1,10 @@
 #!/usr/bin/env ruby
-#          _ _                               _ _         
-#    /\/\ (_) | _____ _ __    /\/\   ___  __| (_) __ _   
-#   /    \| | |/ / _ \ '__|  /    \ / _ \/ _` | |/ _` |  
-#  / /\/\ \ |   <  __/ |    / /\/\ \  __/ (_| | | (_| |  
-#  \/    \/_|_|\_\___|_|    \/    \/\___|\__,_|_|\__,_|  
-#   
-# Discord Meetup Event Bot v0.1
-# by https://miker.media
 
 require 'colorize'
 require 'strscan'
 require 'watir'
 require 'htmlentities'
+require 'json'
 
 class Discord_Meetup_Updater
 
@@ -29,15 +22,14 @@ class Discord_Meetup_Updater
 		@q  = %Q|\u0027|
 		@qq = %Q|\u0022|
 		
-		@emojii = %q|📣 🌟 ✨ ⚡️ 🌀|
-		@emojiis = []
+		@emojii = %w|📣 🌟 ✨ ⚡️ 🌀|
 		
-		@curl = <<-"CURL".gsub(%r~^\s+|^$~,%q||)
-			curl -sS -i \\
-			-H "Accept: application/json" \\
-			-H "Content-Type:application/json" \\
-			-X POST --data \\
-			#{@qq}{\\#{@qq}content\\#{@qq}: \\#{@qq}MESSAGE\\#{@qq}}#{@qq} \\
+		@curl = <<-"CURL".gsub(%r~^\s+|^$|(\n)~) { $1 ? %q| | : %q|| }
+			curl -sS -i
+			-H "Accept: application/json"
+			-H "Content-Type:application/json"
+			-X POST --data
+			#{@q}%s#{@q}
 			#{@q}#{discord}#{@q} 
 		CURL
 		
@@ -51,11 +43,7 @@ class Discord_Meetup_Updater
 				self.meetup_parse 
 			end
 			
-			if @emojiis.length == 0 then
-				@emojiis = @emojii.split(%r~\s~)
-			end
-			
-			emojii = (@emojiis.shuffle.pop) + %q| |
+			emojii = @emojii.sample + %q| |
 			
 			event = @events.shuffle.pop
 			
@@ -64,20 +52,22 @@ class Discord_Meetup_Updater
 
 			next if ((future - time) < 86400)
 			
-			message = <<-"MSG".gsub(%r~^\s+|^$|\n~,%q||)
-				#{emojii * 10}\\n
-				*PSSSSSSSSSSSSSSSSSSSSSSST*\\n
-				Check Out This Upcoming Event:\\n
-				**Title:** #{event[:title]}\\n
-				**Date:** #{event[:date]}\\n
-				**Time:** #{event[:time]}\\n
-				RSVP @ <#{event[:url]}> 👀\\n
-				#{emojii * 10}\\n
+			message = <<-"MSG".gsub(%r~^\s+|^$~,%q||)
+				#{emojii * 10}\n
+				*PSSSSSSSSSSSSSSSSSSSSSSST*\n
+				Check Out This Upcoming Event:\n
+				**Title:** #{event[:title]}\n
+				**Date:** #{event[:date]}\n
+				**Time:** #{event[:time]}\n
+				RSVP @ <#{event[:url]}> 👀\n
+				#{emojii * 10}\n
 			MSG
 			
 			message.gsub!(%r~[#{@qq}]~) { %q|| }
 			
-			%x|#{@curl.sub(%r~MESSAGE~,message)}|
+			json_msg = { content: message }
+			
+			%x|#{@curl % json_msg.to_json}|
 			
 			if $? == 0
 				puts %Q|> Event: | + %Q|#{@q}#{event[:title]}#{@q}|.yellow + %q| >> | + %q|promoted successfully!|.green 
@@ -149,7 +139,7 @@ class Discord_Meetup_Updater
 	
 end
 
-discord = 'Discord Webhook'
+discord = 'Put Discord Webhook Here'
 meetup  = 'https://www.meetup.com/GROUPNAME/events/'
 
 discord = Discord_Meetup_Updater.new(meetup,discord)
